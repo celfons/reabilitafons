@@ -28,11 +28,10 @@ def patients_create(request):
 		if(form.is_valid()):
 			patients_name = form.cleaned_data['name']
 			patients_cpf = form.cleaned_data['cpf']
-			patients_birthday = form.cleaned_data['birthday']
 			patients_user = form.cleaned_data['user']
 			patients_status = form.cleaned_data['status']
 
-			new_patients = Patients(title=patients_name, slug=patients_cpf, body=patients_birthday, author=patients_user, status=patients_status)
+			new_patients = Patients(name=patients_name, cpf=patients_cpf, user=patients_user, status=patients_status)
 			new_patients.save()
 
 			return redirect('centroherd:home')
