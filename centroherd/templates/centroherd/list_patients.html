@@ -1,21 +1,36 @@
 {% extends 'centroherd/base.html' %}
-{% load bootstrap %}
-{% block title %}Lista de pacientes{% endblock %}
+{% block title %}Listagem de Pacientes{% endblock %}
 
 {% block content %}
-	<div class="pagination">
-		<span class="step-links">
-			{% if patients.has_previous %}
-				<a href="?page={{ patients.previous_page_number }}">Anterior</a>
-			{% endif %}
-		
-			<span class="current">
-				{{ patients.number }} de {{ patients.paginator.num_pages }}
+	<div class="container">
+		<div class="jumbotron jumbotron-fluid">
+		  <div class="container">
+		    <h1 class="display-4">Bem vindo ao Django blog!</h1>
+		    <p class="lead">Aqui você vai encontrar os melhores posts sobre o framework.</p>
+		  </div>
+		</div>
+		<div class="row">
+			{% for post in posts %}
+			<div class="col">
+				<h5 class="card-title">{{ patients.name }}</h5>
+				<p>{{ patients.status }}</p>
+			</div>
+			{% endfor %}
+		</div>
+		<div class="pagination">
+			<span class="step-links">
+					{% if posts.has_previous %}
+							<a href="?page={{ patients.previous_page_number }}">Anterior</a>
+					{% endif %}
+	
+					<span class="current">
+							{{ patients.number }} de {{ patients.paginator.num_pages }}
+					</span>
+	
+					{% if posts.has_next %}
+							<a href="?page={{ patients.next_page_number }}">Próxima</a>
+					{% endif %}
 			</span>
-		
-			{% if patients.has_next %}
-				<a href="?page={{ patients.next_page_number }}">Próxima</a>
-			{% endif %}
-		</span>
-	</div>
+		</div>
+	</div> 
 {% endblock %}

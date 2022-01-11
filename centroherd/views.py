@@ -34,7 +34,7 @@ def patients_create(request):
 			new_patients = Patients(name=patients_name, cpf=patients_cpf, user=patients_user, status=patients_status)
 			new_patients.save()
 
-			return redirect('centroherd:patients_list')
+			return redirect('centroherd:list_patients')
 
 	elif(request.method == 'GET'):
 		return render(request, 'centroherd/add_patients.html', {'form': form})
