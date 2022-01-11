@@ -15,7 +15,7 @@ def patients_list(request):
 
     page = request.GET.get('page')
     patients = paginator.get_page(page)
-    return render(request, 'centroherd/patients_list.html', {'patients':patients})
+    return render(request, 'centroherd/list_patients.html', {'patients':patients})
 
 @login_required
 def patients_create(request):
