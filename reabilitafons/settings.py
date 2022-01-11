@@ -76,10 +76,21 @@ WSGI_APPLICATION = 'reabilitafons.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': BASE_DIR / 'db.sqlite3',
+#    }
+#}
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd15m69fomtgg42',
+        'USER': 'isucpbkesbjlrn',
+        'PASSWORD': '23c3877236b1b71d0713907e45353b342529b549924507dcd9bb5beea4144449',
+        'HOST': 'ec2-34-230-198-12.compute-1.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
