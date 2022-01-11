@@ -3,19 +3,24 @@
 
 {% block content %}
 	<div class="container">
-		<div class="jumbotron jumbotron-fluid">
-		  <div class="container">
-		    <h1 class="display-4">Bem vindo ao Django blog!</h1>
-		    <p class="lead">Aqui você vai encontrar os melhores posts sobre o framework.</p>
-		  </div>
-		</div>
 		<div class="row">
-			{% for post in posts %}
-			<div class="col">
-				<h5 class="card-title">{{ patients.name }}</h5>
-				<p>{{ patients.status }}</p>
-			</div>
-			{% endfor %}
+			<table class="table">
+				<thead>
+				  <tr>
+					<th scope="col">Name</th>
+					<th scope="col">Cpf</th>
+					<th scope="col">Status</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  {% for patient in patients %}
+				  <tr>
+					<td>{{ patient.name }}</td>
+					<td>{{ patient.cpf }}</td>
+					<td>{{ patient.status }}</td>
+				  </tr>
+				  {% endfor %}
+			  </table>
 		</div>
 		<div class="pagination">
 			<span class="step-links">
