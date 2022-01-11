@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'centroherd',
     'bootstrapform',
+    'django_admin_inline_paginator',
 ]
 
 MIDDLEWARE = [
