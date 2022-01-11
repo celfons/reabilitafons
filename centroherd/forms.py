@@ -3,5 +3,5 @@ from .models import Patients
 
 class PatientsForm(ModelForm):
     class Meta:
-        model = Post
+        model = Patients
         fields = ['name', 'cpf', 'birthday', 'status']
