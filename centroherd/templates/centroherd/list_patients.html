@@ -24,7 +24,7 @@
 		</div>
 		<div class="pagination">
 			<span class="step-links">
-					{% if posts.has_previous %}
+					{% if patients.has_previous %}
 							<a href="?page={{ patients.previous_page_number }}">Anterior</a>
 					{% endif %}
 	
@@ -32,7 +32,7 @@
 							{{ patients.number }} de {{ patients.paginator.num_pages }}
 					</span>
 	
-					{% if posts.has_next %}
+					{% if patients.has_next %}
 							<a href="?page={{ patients.next_page_number }}">Próxima</a>
 					{% endif %}
 			</span>
