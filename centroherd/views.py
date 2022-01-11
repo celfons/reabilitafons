@@ -6,12 +6,16 @@ from .models import Patients
 from .forms import PatientsForm
 
 def home(request):
-    home = Patients.objects.all().order_by('-created_at')
-    paginator = Paginator(home, 3)
+	return render(request, 'centroherd/home.html')
+
+@login_required
+def patients_list(request):
+    patients_list = Patients.objects.all().order_by('-created_at')
+    paginator = Paginator(patients_list, 3)
 
     page = request.GET.get('page')
     patients = paginator.get_page(page)
-    return render(request, 'centroherd/home.html', {'patients':patients})
+    return render(request, 'centroherd/patients_list.html', {'patients':patients})
 
 @login_required
 def patients_create(request):
@@ -34,4 +38,4 @@ def patients_create(request):
 			return redirect('centroherd:home')
 
 	elif(request.method == 'GET'):
-		return render(request, 'blog/add_patients.html', {'form': form})
+		return render(request, 'centroherd/add_patients.html', {'form': form})
