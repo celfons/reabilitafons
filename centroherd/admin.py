@@ -39,7 +39,7 @@ class PsicologiaAdmin(admin.ModelAdmin):
 
     @admin.display
     def nome(self, obj):
-        return obj.Paciente.nome
+        return obj.paciente.nome
 
     def save_model(self, request, obj, form, change): 
         obj.usuario = request.user
@@ -55,7 +55,7 @@ class SocialAdmin(admin.ModelAdmin):
 
     @admin.display
     def nome(self, obj):
-        return obj.Paciente.nome
+        return obj.paciente.nome
 
     def save_model(self, request, obj, form, change): 
         obj.usuario = request.user
