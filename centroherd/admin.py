@@ -19,7 +19,7 @@ class ContatoInline(TabularInlinePaginated):
 
 class PacienteAdmin(admin.ModelAdmin):
     list_display  = ('nome','cpf', 'rg', 'telefone', 'nascimento', 'estado_civil', 'cor', 'filhos', 'profissao', 'escolaridade', 'pai', 'mae', 'naturalidade', 'endereco', 'bairro', 'cidade', 'bairro', 'cep', 'encaminhamento', 'inss', 'email', 'criado', 'atualizado', 'status', 'usuario')
-    search_fields = ['nome', 'cpf', 'rg', 'status']
+    search_fields = ['nome', 'cpf', 'rg']
     readonly_fields=('usuario',)
 
     model = Paciente
