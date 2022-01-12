@@ -66,3 +66,72 @@ class Social(models.Model):
     atualizado = models.DateField(auto_now=True)
     class Meta:
         verbose_name = ("Serviço Social - Prontuario")
+
+class Enfermagem(models.Model):
+
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    possui_doenca_cronica = models.BooleanField(null=True)
+    uso_medicacao_continua = models.BooleanField(null=True)
+    possui_alergia_medicacao = models.BooleanField(null=True)
+    tabagismo = models.BooleanField(null=True)
+    etilismo = models.BooleanField(null=True)
+    drogas = models.BooleanField(null=True)
+    familia_diabetes = models.BooleanField(null=True)
+    familia_hipertensao = models.BooleanField(null=True)
+    exame_dst = models.BooleanField(null=True)
+    acompanhamento = models.TextField(blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name = ("Enfermagem - Prontuario")
+
+class Doenca_Cronica(models.Model):
+
+    enfermagem = models.ForeignKey(Enfermagem, on_delete=models.CASCADE)
+    DOENCA = (('hiv', 'HIV'), ('hipertensao', 'Hipertensao'), ('diabetes', 'Diabetes'), ('outra', 'Outra'))
+    doenca = models.CharField(max_length=20, choices=DOENCA)
+    outra = models.CharField(max_length=200, blank=True)
+    tempo = models.CharField(max_length=20, blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name = ("Doença(s) Cronica")
+        verbose_name_plural = ("Doença Cronica")
+
+class Medicacao_Continua(models.Model):
+
+    enfermagem = models.ForeignKey(Enfermagem, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=200)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name = ("Medicação Continua")
+        verbose_name_plural = ("Medicação Continua")
+
+class Alergia_Medicamento(models.Model):
+
+    enfermagem = models.ForeignKey(Enfermagem, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=200)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name = ("Alergia Medicamento")
+        verbose_name_plural = ("Alergia Medicamento")
+
+class DST(models.Model):
+
+    enfermagem = models.ForeignKey(Enfermagem, on_delete=models.CASCADE)
+    nome = models.CharField(max_length=200)
+    tratamento = models.BooleanField(null=True)
+    constatado = models.DateField(auto_now_add=False, blank=True, null=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name = ("DST")
+        verbose_name_plural = ("DST")
+
