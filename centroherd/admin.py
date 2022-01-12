@@ -42,7 +42,7 @@ class PsicologiaAdmin(admin.ModelAdmin):
         return obj.Paciente.nome
 
     def save_model(self, request, obj, form, change): 
-        obj.user = request.user
+        obj.usuario = request.user
         obj.save()
 
 admin.site.register(Psicologia, PsicologiaAdmin)
@@ -58,7 +58,7 @@ class SocialAdmin(admin.ModelAdmin):
         return obj.Paciente.nome
 
     def save_model(self, request, obj, form, change): 
-        obj.user = request.user
+        obj.usuario = request.user
         obj.save()
 
 admin.site.register(Social, SocialAdmin)
