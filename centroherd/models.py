@@ -43,7 +43,7 @@ class Paciente(models.Model):
 @receiver(signals.post_save , sender=Paciente)
 def paciente_criado(sender, instance, created, **kwargs):
     paciente = instance
-    if paciente.id is None:
+    if kwargs['update_fields'] is None:
         FilaPsicologia.objects.create(paciente=instance)
         FilaSocial.objects.create(paciente=instance)
         FilaEnfermagem.objects.create(paciente=instance)
