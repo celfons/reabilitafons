@@ -70,6 +70,7 @@ class FilaPsicologiaAdmin(admin.ModelAdmin):
     list_display  = ('nome', 'criado')
     search_fields = ['paciente__nome']
     autocomplete_fields = ['paciente']
+    ordering = ('-criado',)
 
     @admin.display
     def nome(self, obj):
@@ -97,6 +98,7 @@ class FilaSocialAdmin(admin.ModelAdmin):
     list_display  = ('nome', 'criado')
     search_fields = ['paciente__nome']
     autocomplete_fields = ['paciente']
+    ordering = ('-criado',)
 
     @admin.display
     def nome(self, obj):
@@ -161,6 +163,7 @@ class FilaEnfermagemAdmin(admin.ModelAdmin):
     list_display  = ('nome', 'criado')
     search_fields = ['paciente__nome']
     autocomplete_fields = ['paciente']
+    ordering = ('-criado',)
 
     @admin.display
     def nome(self, obj):
