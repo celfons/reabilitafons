@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-68ibjpd#rsu@wri%@b#wn(irfkymqv77l@%kk=(1^-sdnvwgzz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DEBUG') == True
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['https://reabilitafons.herokuapp.com', 'https://reabilitafons-teste.herokuapp.com/']
 
@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'reabilitafons.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd15m69fomtgg42',
+        'NAME': os.environ.get('DATABASE_NAME'),
         'USER': os.environ.get('DATABASE_USER'),
         'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
         'HOST': os.environ.get('DATABASE_HOST'),
