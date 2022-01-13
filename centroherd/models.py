@@ -76,7 +76,7 @@ def remove_fila_psicologia(sender, instance, created, **kwargs):
 
 class FilaPsicologia(models.Model):
 
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, unique=True)
     criado = models.DateField(auto_now_add=True)
     class Meta:
         verbose_name = ("Fila - Psicologia")
@@ -103,7 +103,7 @@ def remove_fila_social(sender, instance, created, **kwargs):
 
 class FilaSocial(models.Model):
 
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, unique=True)
     criado = models.DateField(auto_now_add=True)
     class Meta:
         verbose_name = ("Fila - Serviço Social")
@@ -139,7 +139,7 @@ def remove_fila_enfermagem(sender, instance, created, **kwargs):
 
 class FilaEnfermagem(models.Model):
 
-    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, unique=True)
     criado = models.DateField(auto_now_add=True)
     class Meta:
         verbose_name = ("Fila - Enfermagem")
