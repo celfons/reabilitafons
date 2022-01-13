@@ -3,15 +3,18 @@ from django.contrib.auth.models import User
 from django.db.models import signals
 from django.dispatch import receiver
 from django.core.mail import send_mail
+from django.contrib.auth import get_user_model
 
 class Paciente(models.Model):
 
+    CONVENIO = (('senapred', 'SENAPRED'), ('comad', 'COMAD'), ('sem', 'Sem convênio'))
     STATUS = (('ativo', 'Ativo'), ('inativo', 'Inativo'))
     ESTADO = (('solteiro', 'Solteiro'), ('casado', 'Casado'), ('viuvo', 'Viuvo'), ('divorciado', 'Divorciado'))
     ESCOLARIDADE = (('analfabeto', 'Analfabeto'), ('infantil', 'Infantil'), ('primario', 'Primario'), ('fundamental', 'Fundamental'), ('medio', 'Medio'), ('superior', 'Superior'), ('desconhecido', 'Desconhecido'))
     nome = models.CharField(max_length=200)
     cpf = models.BigIntegerField(unique=True)
     rg = models.BigIntegerField(unique=True)
+    convenio = models.CharField(max_length=10, choices=CONVENIO)
     telefone = models.BigIntegerField(blank=True, null=True)
     nascimento = models.DateField(auto_now_add=False, blank=True, null=True)
     estado_civil = models.CharField(max_length=15, choices=ESTADO, blank=True)
@@ -44,13 +47,19 @@ def paciente_criado(sender, instance, created, **kwargs):
     FilaSocial.objects.create(paciente=instance)
     FilaEnfermagem.objects.create(paciente=instance)
     try:
-        send_mail(
-            '[EMAIL AUTOMATICO] Novo paciente cadastrado',
-            'Novo paciente cadastrado, verifique sua fila para atendimento: https://reabilitafons.herokuapp.com',
-            'reabilitafons@gmail.com',
-            [paciente.usuario.email],
-            fail_silently=False,
-        )
+        User = get_user_model()
+        users = User.objects.all()
+        for user in users:
+            if user.email == '':
+                print("não tem email")
+            else:
+                send_mail(
+                    '[EMAIL AUTOMATICO] Novo paciente cadastrado',
+                    'Novo paciente cadastrado, verifique sua fila para atendimento: https://reabilitafons.herokuapp.com',
+                    'reabilitafons@gmail.com',
+                    [user.email],
+                    fail_silently=False,
+                )
     except:
         print("error")
 
