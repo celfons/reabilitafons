@@ -43,25 +43,27 @@ class Paciente(models.Model):
 @receiver(signals.post_save , sender=Paciente)
 def paciente_criado(sender, instance, created, **kwargs):
     paciente = instance
-    FilaPsicologia.objects.create(paciente=instance)
-    FilaSocial.objects.create(paciente=instance)
-    FilaEnfermagem.objects.create(paciente=instance)
-    try:
-        User = get_user_model()
-        users = User.objects.all()
-        for user in users:
-            if user.email == '':
-                print("não tem email")
-            else:
-                send_mail(
-                    '[EMAIL AUTOMATICO] Novo paciente cadastrado',
-                    'Novo paciente cadastrado, verifique sua fila para atendimento: https://reabilitafons.herokuapp.com',
-                    'reabilitafons@gmail.com',
-                    [user.email],
-                    fail_silently=False,
-                )
-    except:
-        print("error")
+    if instance.id is None:
+        FilaPsicologia.objects.create(paciente=instance)
+        FilaSocial.objects.create(paciente=instance)
+        FilaEnfermagem.objects.create(paciente=instance)
+        try:
+            User = get_user_model()
+            users = User.objects.all()
+            for user in users:
+                if user.email == '':
+                    print("não tem email")
+                else:
+                    send_mail(
+                        '[EMAIL AUTOMATICO] Novo paciente cadastrado',
+                        'Novo paciente cadastrado, verifique sua fila para atendimento: https://reabilitafons.herokuapp.com',
+                        'reabilitafons@gmail.com',
+                        [user.email],
+                        fail_silently=False,
+                    )
+        except:
+            print("error")
+            
 
 class Contato(models.Model):
 
