@@ -6,21 +6,25 @@ class PsicologiaInline(TabularInlinePaginated):
     model = Psicologia    
     per_page = 1
     readonly_fields=('usuario',)
+    ordering = ('-criado',)
 
 class SocialInline(TabularInlinePaginated):
     model = Social    
     per_page = 1
     readonly_fields=('usuario',)
+    ordering = ('-criado',)
 
 class ContatoInline(TabularInlinePaginated):
     model = Contato    
     per_page = 1
     readonly_fields=('usuario',)
+    ordering = ('-criado',)
 
 class EnfermagemInline(TabularInlinePaginated):
     model = Enfermagem    
     per_page = 1
     readonly_fields=('usuario',)
+    ordering = ('-criado',)
 
 class PacienteAdmin(admin.ModelAdmin):
     list_display  = ('nome','cpf', 'rg', 'telefone', 'nascimento', 'estado_civil', 'cor', 'filhos', 'profissao', 'escolaridade', 'pai', 'mae', 'naturalidade', 'endereco', 'bairro', 'cidade', 'bairro', 'cep', 'encaminhamento', 'inss', 'email', 'criado', 'atualizado', 'status', 'usuario')
@@ -104,21 +108,25 @@ class DoencaCronicaInline(TabularInlinePaginated):
     model = Doenca_Cronica    
     per_page = 1
     readonly_fields=('usuario',)
+    ordering = ('-criado',)
 
 class MedicacaoContinuaInline(TabularInlinePaginated):
     model = Medicacao_Continua    
     per_page = 1
     readonly_fields=('usuario',)
+    ordering = ('-criado',)
 
 class AlergiaMedicamentoInline(TabularInlinePaginated):
     model = Alergia_Medicamento    
     per_page = 1
     readonly_fields=('usuario',)
+    ordering = ('-criado',)
 
 class DSTInline(TabularInlinePaginated):
     model = DST    
     per_page = 1
     readonly_fields=('usuario',)    
+    ordering = ('-criado',)
 
 class EnfermagemAdmin(admin.ModelAdmin):
     list_display  = ('nome','possui_doenca_cronica', 'uso_medicacao_continua', 'possui_alergia_medicacao', 'tabagismo', 'etilismo', 'drogas', 'familia_diabetes', 'familia_hipertensao', 'exame_dst', 'acompanhamento')
