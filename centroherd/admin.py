@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST
+from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST, FilaPsicologia, FilaSocial, FilaEnfermagem
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 class PsicologiaInline(TabularInlinePaginated):
@@ -62,6 +62,17 @@ class PsicologiaAdmin(admin.ModelAdmin):
 
 admin.site.register(Psicologia, PsicologiaAdmin)
 
+class FilaPsicologiaAdmin(admin.ModelAdmin):
+    list_display  = ('nome', 'criado')
+    search_fields = ['paciente__nome']
+    autocomplete_fields = ['paciente']
+
+    @admin.display
+    def nome(self, obj):
+        return obj.paciente.nome
+
+admin.site.register(FilaPsicologia, FilaPsicologiaAdmin)
+
 class SocialAdmin(admin.ModelAdmin):
     list_display  = ('nome', 'acompanhamento', 'criado', 'atualizado', 'usuario')
     search_fields = ['paciente__nome']
@@ -77,6 +88,17 @@ class SocialAdmin(admin.ModelAdmin):
         obj.save()
 
 admin.site.register(Social, SocialAdmin)
+
+class FilaSocialAdmin(admin.ModelAdmin):
+    list_display  = ('nome', 'criado')
+    search_fields = ['paciente__nome']
+    autocomplete_fields = ['paciente']
+
+    @admin.display
+    def nome(self, obj):
+        return obj.paciente.nome
+
+admin.site.register(FilaSocial, FilaSocialAdmin)
 
 class DoencaCronicaInline(TabularInlinePaginated):
     model = Doenca_Cronica    
@@ -126,3 +148,14 @@ class EnfermagemAdmin(admin.ModelAdmin):
         formset.save()
 
 admin.site.register(Enfermagem, EnfermagemAdmin)
+
+class FilaEnfermagemAdmin(admin.ModelAdmin):
+    list_display  = ('nome', 'criado')
+    search_fields = ['paciente__nome']
+    autocomplete_fields = ['paciente']
+
+    @admin.display
+    def nome(self, obj):
+        return obj.paciente.nome
+
+admin.site.register(FilaEnfermagem, FilaEnfermagemAdmin)

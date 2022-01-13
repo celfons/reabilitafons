@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.contrib.auth.models import Group
+from django.db.models import signals
+from django.dispatch import receiver
 
 class Paciente(models.Model):
 
@@ -35,6 +36,13 @@ class Paciente(models.Model):
     def __str__(self):
         return self.nome
 
+@receiver(signals.post_save , sender=Paciente)
+def create_customer(sender, instance, created, **kwargs):
+    paciente = instance
+    FilaPsicologia.objects.create(paciente=instance)
+    FilaSocial.objects.create(paciente=instance)
+    FilaEnfermagem.objects.create(paciente=instance)
+
 class Contato(models.Model):
 
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
@@ -57,6 +65,23 @@ class Psicologia(models.Model):
     class Meta:
         verbose_name = ("Psicologia - Prontuario")
 
+@receiver(signals.post_save , sender=Psicologia)
+def remove_fila_psicologia(sender, instance, created, **kwargs):
+    try:
+        paciente = instance.paciente
+        fila = FilaPsicologia.objects.get(paciente=paciente)
+        fila.delete()
+    except:
+        print("error")
+
+class FilaPsicologia(models.Model):
+
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    class Meta:
+        verbose_name = ("Fila - Psicologia")
+        verbose_name_plural = ("Fila - Psicologia")
+
 class Social(models.Model):
 
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
@@ -66,6 +91,23 @@ class Social(models.Model):
     atualizado = models.DateField(auto_now=True)
     class Meta:
         verbose_name = ("Serviço Social - Prontuario")
+
+@receiver(signals.post_save , sender=Social)
+def remove_fila_social(sender, instance, created, **kwargs):
+    try:
+        paciente = instance.paciente
+        fila = FilaSocial.objects.get(paciente=paciente)
+        fila.delete()
+    except:
+        print("error")
+
+class FilaSocial(models.Model):
+
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    class Meta:
+        verbose_name = ("Fila - Serviço Social")
+        verbose_name_plural = ("Fila - Serviço Social")
 
 class Enfermagem(models.Model):
 
@@ -85,6 +127,23 @@ class Enfermagem(models.Model):
     atualizado = models.DateField(auto_now=True)
     class Meta:
         verbose_name = ("Enfermagem - Prontuario")
+
+@receiver(signals.post_save , sender=Enfermagem)
+def remove_fila_enfermagem(sender, instance, created, **kwargs):
+    try:
+        paciente = instance.paciente
+        fila = FilaEnfermagem.objects.get(paciente=paciente)
+        fila.delete()
+    except:
+        print("error")
+
+class FilaEnfermagem(models.Model):
+
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    class Meta:
+        verbose_name = ("Fila - Enfermagem")
+        verbose_name_plural = ("Fila - Enfermagem")
 
 class Doenca_Cronica(models.Model):
 
