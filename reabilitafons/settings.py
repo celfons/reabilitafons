@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-68ibjpd#rsu@wri%@b#wn(irfkymqv77l@%kk=(1^-sdnvwgzz'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG') == True
 
-ALLOWED_HOSTS = ['https://reabilitafons.herokuapp.com']
+ALLOWED_HOSTS = ['https://reabilitafons.herokuapp.com', 'https://reabilitafons-teste.herokuapp.com/']
 
 
 # Application definition
@@ -91,9 +91,9 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'd15m69fomtgg42',
-        'USER': 'isucpbkesbjlrn',
-        'PASSWORD': '23c3877236b1b71d0713907e45353b342529b549924507dcd9bb5beea4144449',
-        'HOST': 'ec2-34-230-198-12.compute-1.amazonaws.com',
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST'),
         'PORT': '5432',
     }
 }
@@ -156,5 +156,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'reabilitafons@gmail.com'
-EMAIL_HOST_PASSWORD = '33216777'
+EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
