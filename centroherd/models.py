@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models import signals
 from django.dispatch import receiver
+from django.core.mail import send_mail
 
 class Paciente(models.Model):
 
@@ -37,11 +38,21 @@ class Paciente(models.Model):
         return self.nome
 
 @receiver(signals.post_save , sender=Paciente)
-def create_customer(sender, instance, created, **kwargs):
+def paciente_criado(sender, instance, created, **kwargs):
     paciente = instance
     FilaPsicologia.objects.create(paciente=instance)
     FilaSocial.objects.create(paciente=instance)
     FilaEnfermagem.objects.create(paciente=instance)
+    try:
+        send_mail(
+            '[EMAIL AUTOMATICO] Novo paciente cadastrado',
+            'Novo paciente cadastrado, verifique sua fila para atendimento: https://reabilitafons.herokuapp.com',
+            'reabilitafons@gmail.com',
+            [paciente.usuario.email],
+            fail_silently=False,
+        )
+    except:
+        print("error")
 
 class Contato(models.Model):
 
