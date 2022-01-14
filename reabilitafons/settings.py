@@ -160,5 +160,5 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASSWORD')
 
 NEW_RELIC_LOG='stdout'
-NEW_RELIC_LICENSE_KEY='def8049c1dbd9fdf6d21aade36fecfc8d229NRAL'
+NEW_RELIC_LICENSE_KEY=os.environ.get('NEW_RELIC')
 NEW_RELIC_APP_NAME='centroherd'
