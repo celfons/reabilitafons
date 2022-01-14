@@ -2,5 +2,5 @@
 
 https://reabilitafons-stg.herokuapp.com/
 
-admin
-123456
+usuario: admin
+senha: 123456
