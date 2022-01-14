@@ -43,11 +43,11 @@ class Paciente(models.Model):
 @receiver(signals.post_save , sender=Paciente)
 def paciente_criado(sender, instance, created, **kwargs):
     paciente = instance
-    if kwargs['update_fields'] is None:
-        try:
-            FilaPsicologia.objects.create(paciente=instance)
-            FilaSocial.objects.create(paciente=instance)
-            FilaEnfermagem.objects.create(paciente=instance)
+    if created is True:
+        FilaPsicologia.objects.create(paciente=instance)
+        FilaSocial.objects.create(paciente=instance)
+        FilaEnfermagem.objects.create(paciente=instance)
+        try:          
             User = get_user_model()
             users = User.objects.all()
             for user in users:
