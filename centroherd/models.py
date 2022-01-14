@@ -44,10 +44,10 @@ class Paciente(models.Model):
 def paciente_criado(sender, instance, created, **kwargs):
     paciente = instance
     if kwargs['update_fields'] is None:
-        FilaPsicologia.objects.create(paciente=instance)
-        FilaSocial.objects.create(paciente=instance)
-        FilaEnfermagem.objects.create(paciente=instance)
         try:
+            FilaPsicologia.objects.create(paciente=instance)
+            FilaSocial.objects.create(paciente=instance)
+            FilaEnfermagem.objects.create(paciente=instance)
             User = get_user_model()
             users = User.objects.all()
             for user in users:
@@ -61,9 +61,9 @@ def paciente_criado(sender, instance, created, **kwargs):
                         [user.email],
                         fail_silently=False,
                     )
-        except:
-            print("error")
-            
+            except:
+                print("error")
+                
 
 class Contato(models.Model):
 
