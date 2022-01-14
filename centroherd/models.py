@@ -61,9 +61,9 @@ def paciente_criado(sender, instance, created, **kwargs):
                         [user.email],
                         fail_silently=False,
                     )
-            except:
-                print("error")
-                
+        except:
+            print("error")
+
 
 class Contato(models.Model):
 
