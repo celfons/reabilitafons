@@ -31,6 +31,10 @@ class Paciente(models.Model):
     cep = models.BigIntegerField(blank=True, null=True)
     encaminhamento = models.CharField(max_length=200, blank=True)
     inss = models.CharField(max_length=100, blank=True)
+    cartao_sus = models.CharField(max_length=100, blank=True)
+    reservista = models.CharField(max_length=100, blank=True)
+    titulo_eleitor = models.CharField(max_length=100, blank=True)
+    carteira_trabalho = models.CharField(max_length=100, blank=True)
     email = models.EmailField(blank=True)
     criado = models.DateField(auto_now_add=True)
     atualizado = models.DateField(auto_now=True)
@@ -80,7 +84,7 @@ class Contato(models.Model):
 class Psicologia(models.Model):
 
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    acompanhamento = models.TextField()
+    acompanhamento = models.TextField(blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     criado = models.DateField(auto_now_add=True)
     atualizado = models.DateField(auto_now=True)
@@ -105,9 +109,19 @@ class FilaPsicologia(models.Model):
         verbose_name_plural = ("Fila - Psicologia")
 
 class Social(models.Model):
-
+    JUSTICA = (('sim', 'Sim'), ('nao', 'Não'), ('ns', 'N.S'))
+    FAMILIAR = (('fortalecidos', 'Fortalecidos'), ('fragilizados', 'Fragilizados'), ('rompidos', 'Rompidos'), ('ns', 'N.S'), ('nr', 'N.R'))
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    acompanhamento = models.TextField()
+    modalidade_atencao_orientada = models.CharField(max_length=200, blank=True)
+    situacao_profissional = models.CharField(max_length=200, blank=True)
+    possui_renda = models.BooleanField(null=True, blank=True)
+    problemas_com_justica = models.CharField(max_length=5, choices=JUSTICA, blank=True)
+    problemas_com_justica_observacao = models.TextField(blank=True)
+    relacao_familiar = models.CharField(max_length=12, choices=FAMILIAR, blank=True)
+    relato_caso = models.TextField(blank=True)
+    problemas_causados_pela_droga = models.TextField(blank=True)
+    familiar_com_historico_de_uso = models.TextField(blank=True)
+    observacao = models.TextField(blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     criado = models.DateField(auto_now_add=True)
     atualizado = models.DateField(auto_now=True)
@@ -130,6 +144,42 @@ class FilaSocial(models.Model):
     class Meta:
         verbose_name = ("Fila - Serviço Social")
         verbose_name_plural = ("Fila - Serviço Social")
+
+class HistoricoDroga(models.Model):
+    DROGA = (('alcool', 'Alcool'), ('crack', 'Crack'), ('maconha', 'Maconha/Haxixe'), ('cocaina', 'Cocaina'), ('inalante', 'Inalante/Cola'), ('diazepan', 'Diazepan'), ('anfetamina', 'Anfetamina/Remedio p/ Emagrecer'), ('ecstasy', 'Ecstasy/MDMA'), ('lsd', 'LSD'), ('heroina', 'Heroina'), ('tabaco', 'Tabaco'), ('outros', 'Outros'))
+    social = models.ForeignKey(Social, on_delete=models.CASCADE)
+    droga = models.CharField(max_length=100, choices=DROGA)
+    quantas_vezes_interrompeu_uso = models.BigIntegerField()
+    observacoes = models.TextField(blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta: 
+        verbose_name_plural = ("Histórico de Drogas")
+
+class PlanoAcao(models.Model):
+    social = models.ForeignKey(Social, on_delete=models.CASCADE)
+    demandas = models.TextField(blank=True)
+    previsao = models.DateField(auto_now_add=False, blank=True, null=True)
+    observacao = models.TextField(blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name_plural = ("Plano de Ações")
+
+class HistoricoTratamento(models.Model):
+    social = models.ForeignKey(Social, on_delete=models.CASCADE)
+    instituicao = models.CharField(max_length=200)
+    periodo_inicial = models.DateField(blank=True)
+    periodo_final = models.DateField(blank=True)
+    observacao = models.TextField(blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name_plural = ("Histortico de Tratamentos")
+
 
 class Enfermagem(models.Model):
 

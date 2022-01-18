@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST, FilaPsicologia, FilaSocial, FilaEnfermagem
+from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST, FilaPsicologia, FilaSocial, FilaEnfermagem, HistoricoDroga, PlanoAcao, HistoricoTratamento
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 class PsicologiaInline(TabularInlinePaginated):
@@ -78,11 +78,36 @@ class FilaPsicologiaAdmin(admin.ModelAdmin):
 
 admin.site.register(FilaPsicologia, FilaPsicologiaAdmin)
 
+class HistoricoDrogaInline(TabularInlinePaginated):
+    model = HistoricoDroga    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
+class PlanoAcaoInline(TabularInlinePaginated):
+    model = PlanoAcao    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
+class HistoricoTratamentoInline(TabularInlinePaginated):
+    model = HistoricoTratamento    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
 class SocialAdmin(admin.ModelAdmin):
-    list_display  = ('nome', 'acompanhamento', 'criado', 'atualizado', 'usuario')
+    list_display  = ('nome', 'modalidade_atencao_orientada', 'situacao_profissional', 'possui_renda', 'problemas_com_justica', 'problemas_com_justica_observacao', 'relacao_familiar', 'relato_caso', 'problemas_causados_pela_droga', 'familiar_com_historico_de_uso', 'observacao', 'criado', 'atualizado', 'usuario')
     search_fields = ['paciente__nome']
     autocomplete_fields = ['paciente']
     readonly_fields=('usuario',)
+
+    model = Social
+    inlines = [
+        HistoricoDrogaInline,
+        PlanoAcaoInline,
+        HistoricoTratamentoInline,
+    ]
 
     @admin.display
     def nome(self, obj):
@@ -91,6 +116,11 @@ class SocialAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change): 
         obj.usuario = request.user
         obj.save()
+
+    def save_formset(self, request, form, formset, change):
+        for form in formset.forms:
+            form.instance.usuario = request.user
+        formset.save()
 
 admin.site.register(Social, SocialAdmin)
 
