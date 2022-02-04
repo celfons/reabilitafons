@@ -1,8 +1,14 @@
 from django.contrib import admin
-from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST, FilaPsicologia, FilaSocial, FilaEnfermagem, HistoricoDroga, PlanoAcao, HistoricoTratamento
+from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST, FilaPsicologia, FilaSocial, FilaEnfermagem, HistoricoDroga, PlanoAcao, HistoricoTratamento, Medicina, FilaMedicina
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 class PsicologiaInline(TabularInlinePaginated):
+    model = Psicologia    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
+class MedicinaInline(TabularInlinePaginated):
     model = Psicologia    
     per_page = 1
     readonly_fields=('usuario',)
@@ -27,7 +33,7 @@ class EnfermagemInline(TabularInlinePaginated):
     ordering = ('-criado',)
 
 class PacienteAdmin(admin.ModelAdmin):
-    list_display  = ('nome','cpf', 'rg', 'convenio', 'telefone', 'nascimento', 'estado_civil', 'cor', 'filhos', 'profissao', 'escolaridade', 'pai', 'mae', 'naturalidade', 'endereco', 'bairro', 'cidade', 'bairro', 'cep', 'encaminhamento', 'inss', 'email', 'criado', 'atualizado', 'status', 'usuario')
+    list_display  = ('nome','cpf', 'rg', 'convenio', 'telefone', 'nascimento', 'estado_civil', 'cor', 'filhos', 'profissao', 'escolaridade', 'pai', 'mae', 'naturalidade', 'endereco', 'bairro', 'cidade', 'bairro', 'cep', 'encaminhamento', 'inss', 'email', 'unidade','criado', 'atualizado', 'status', 'usuario')
     search_fields = ['nome', 'cpf', 'rg']
     readonly_fields=('usuario',)
 
@@ -35,6 +41,7 @@ class PacienteAdmin(admin.ModelAdmin):
     inlines = [
         ContatoInline,
         PsicologiaInline,
+        MedicinaInline,
         SocialInline,
         EnfermagemInline,
     ]
@@ -200,3 +207,31 @@ class FilaEnfermagemAdmin(admin.ModelAdmin):
         return obj.paciente.nome
 
 admin.site.register(FilaEnfermagem, FilaEnfermagemAdmin)
+
+class MedicinaAdmin(admin.ModelAdmin):
+    list_display  = ('nome', 'acompanhamento', 'criado', 'atualizado', 'usuario')
+    search_fields = ['paciente__nome']
+    autocomplete_fields = ['paciente']
+    readonly_fields=('usuario',)
+
+    @admin.display
+    def nome(self, obj):
+        return obj.paciente.nome
+
+    def save_model(self, request, obj, form, change): 
+        obj.usuario = request.user
+        obj.save()
+
+admin.site.register(Medicina, MedicinaAdmin)
+
+class FilaMedicinaAdmin(admin.ModelAdmin):
+    list_display  = ('nome', 'criado')
+    search_fields = ['paciente__nome']
+    autocomplete_fields = ['paciente']
+    ordering = ('-criado',)
+
+    @admin.display
+    def nome(self, obj):
+        return obj.paciente.nome
+
+admin.site.register(FilaMedicina, FilaMedicinaAdmin)

@@ -6,7 +6,7 @@ from django.core.mail import send_mail
 from django.contrib.auth import get_user_model
 
 class Paciente(models.Model):
-
+    UNIDADE = (('1', 'Unidade 1'), ('2', 'Unidade 2'))
     CONVENIO = (('senapred', 'SENAPRED'), ('comad', 'COMAD'), ('sem', 'Sem convênio'))
     STATUS = (('ativo', 'Ativo'), ('inativo', 'Inativo'))
     ESTADO = (('solteiro', 'Solteiro'), ('casado', 'Casado'), ('viuvo', 'Viuvo'), ('divorciado', 'Divorciado'))
@@ -36,6 +36,7 @@ class Paciente(models.Model):
     titulo_eleitor = models.CharField(max_length=100, blank=True)
     carteira_trabalho = models.CharField(max_length=100, blank=True)
     email = models.EmailField(blank=True)
+    unidade = models.CharField(max_length=2, choices=UNIDADE, default=1)
     criado = models.DateField(auto_now_add=True)
     atualizado = models.DateField(auto_now=True)
     status = models.CharField(max_length=15, choices=STATUS)
@@ -266,3 +267,29 @@ class DST(models.Model):
         verbose_name = ("DST")
         verbose_name_plural = ("DST")
 
+class Medicina(models.Model):
+
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
+    acompanhamento = models.TextField(blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta:
+        verbose_name = ("Medicina - Prontuario")
+
+@receiver(signals.post_save , sender=Medicina)
+def remove_fila_medicina(sender, instance, created, **kwargs):
+    try:
+        paciente = instance.paciente
+        fila = FilaMedicina.objects.get(paciente=paciente)
+        fila.delete()
+    except:
+        print("error")
+
+class FilaMedicina(models.Model):
+
+    paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE, unique=True)
+    criado = models.DateField(auto_now_add=True)
+    class Meta:
+        verbose_name = ("Fila - Medicina")
+        verbose_name_plural = ("Fila - Medicina")
