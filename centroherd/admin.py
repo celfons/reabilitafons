@@ -9,7 +9,7 @@ class PsicologiaInline(TabularInlinePaginated):
     ordering = ('-criado',)
 
 class MedicinaInline(TabularInlinePaginated):
-    model = Psicologia    
+    model = Medicina    
     per_page = 1
     readonly_fields=('usuario',)
     ordering = ('-criado',)
