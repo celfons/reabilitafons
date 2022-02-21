@@ -82,10 +82,56 @@ class Contato(models.Model):
     class Meta:
         verbose_name = ("Telefones de Contato")
 
-class Psicologia(models.Model):
 
+class Psicologia(models.Model):
+    MORADIA = (('so', 'So'), ('pais', 'Pais'), ('familiares', 'Esposa/Filhos'), ('alojamento', 'Alojamento'), ('amigos', 'Amigos'), ('parentes', 'Parentes'), ('outros', 'Outros'))
+    DEMANDA = (('propria', 'Propria'), ('familiares', 'Familiares'), ('amigos', 'Amigos'), ('empresa', 'Empresa'))
+    DEMANDA_EMPRESA = (('testagem', 'Testagem Positiva'), ('espontanea', 'Demanda Espontanea'), ('servico_saude', 'Demanda Serviço Saúde'))
+    SITUACAO = (('excelente', 'Excelente'), ('muito_bom', 'Muito Bom(a)'), ('bom', 'Bom(a)'), ('razoavel', 'Razoavel'), ('ruim', 'Ruim'), ('pessimo', 'Péssimo(a)'))
     paciente = models.ForeignKey(Paciente, on_delete=models.CASCADE)
-    acompanhamento = models.TextField(blank=True)
+    condicoes_moradia = models.CharField(max_length=15, choices=MORADIA, blank=True)
+    demanda_atendimento = models.CharField(max_length=20, choices=DEMANDA, blank=True)
+    se_empresa = models.CharField(max_length=20, choices=DEMANDA_EMPRESA, blank=True)
+    motivo_demanda = models.TextField(blank=True)
+    situacao_atual = models.TextField(blank=True)
+    usuario_espera_tratamento = models.TextField(blank=True)
+    tratamento_anterior = models.BooleanField(null=True, blank=True)
+    frequencia_e_locais = models.TextField(blank=True)
+    sintoma_ao_chegar = models.BooleanField(null=True, blank=True)
+    outros_sintomas = models.TextField(blank=True)
+    droga_intravenosa = models.BooleanField(null=True, blank=True)
+    overdose_por_essas_drogas = models.BooleanField(null=True, blank=True)
+    overdose_droga_e_frequencia = models.TextField(blank=True)
+    situacao_que_faz_o_uso = models.TextField(blank=True)
+    reacoes_da_droga = models.TextField(blank=True)
+    saude = models.TextField(blank=True)
+    sono = models.TextField(blank=True)
+    alimentacao = models.TextField(blank=True)
+    alucinacao_com_droga = models.BooleanField(null=True, blank=True)
+    alucinacao_sem_droga = models.BooleanField(null=True, blank=True)
+    desmaio_convulcao_com_droga = models.BooleanField(null=True, blank=True)
+    desmaio_convulcao_sem_droga = models.BooleanField(null=True, blank=True)
+    toma_alguma_medicacao = models.BooleanField(null=True, blank=True)
+    quais_medicacoes = models.TextField(blank=True)
+    critica_situacao = models.CharField(max_length=20, choices=SITUACAO, blank=True)
+    desemprego = models.BooleanField(null=True, blank=True)
+    dificuldade_ter_manter_vinculos_sociais = models.BooleanField(null=True, blank=True)
+    dificuldade_de_gerir_propria_vida = models.BooleanField(null=True, blank=True)
+    problemas_familiares = models.BooleanField(null=True, blank=True)
+    agressividade = models.BooleanField(null=True, blank=True)
+    problemas_ambiente_trabalho = models.BooleanField(null=True, blank=True)
+    problemas_legais_juridicos_existentes_ou_pendentes = models.BooleanField(null=True, blank=True)
+    quais_problemas_legais_juridicos = models.TextField(blank=True)
+    ultimo_episodio_de_consumo = models.CharField(max_length=100, null=True, blank=True)
+    tempo_abstitencia = models.CharField(max_length=100, null=True, blank=True)
+    quantidade_consumida = models.CharField(max_length=100, null=True, blank=True)
+    via_administracao_escolhida = models.CharField(max_length=100, null=True, blank=True)
+    frequencia_consumo_ultimos_meses = models.CharField(max_length=100, null=True, blank=True)
+    parecer_tecnico = models.TextField(blank=True)
+    hipoteses_diagnosticas = models.TextField(blank=True)
+    metas_atividades_terapeuticas = models.TextField(blank=True)
+    fatores_de_risco_e_mantenedores_da_dependencia = models.TextField(blank=True)
+    fatores_de_protecao_e_prognosticos_da_dependencia = models.TextField(blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     criado = models.DateField(auto_now_add=True)
     atualizado = models.DateField(auto_now=True)
@@ -108,6 +154,67 @@ class FilaPsicologia(models.Model):
     class Meta:
         verbose_name = ("Fila - Psicologia")
         verbose_name_plural = ("Fila - Psicologia")
+
+
+class TratamentosAnteriores(models.Model):
+    TRATAMENTO = (('psiquiatrico', 'Psiquiatrico'), ('medico_clinico', 'Medico Clinico'), ('psicoterapico', 'Psicoterapico'), ('psicanalitico', 'Psicanalitico'), ('grupo_ajuda_mutua', 'Grupo de Ajuda Mútua'), ('religioso', 'Religioso'), ('comunidade_terapeutica', 'Comunidade Terapeutica'), ('outros', 'Outros'))
+    psicologia = models.ForeignKey(Psicologia, on_delete=models.CASCADE)
+    tratamento = models.CharField(max_length=100, choices=TRATAMENTO)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta: 
+        verbose_name_plural = ("Tratamentos Anteriores")
+
+class Sintomas(models.Model):
+    SINTOMAS = (('tosse', 'Tosse'), ('dispneia', 'Dispenia/Falta de ar'), ('dor', 'Dor'), ('febre', 'Febre'), ('emagrecimento', 'Emagrecimento'), ('lesao_da_pele', 'Lesao da Pele'), ('diarreia', 'Diarreia'), ('nausea_vomito', 'Nausea/Vomito'), ('fraqueza', 'Fraqueza Muscular'), ('tremores', 'Tremores'), ('dificuldade_locomocao', 'Dificuldade de locomoção'), ('outros', 'Outros'))
+    psicologia = models.ForeignKey(Psicologia, on_delete=models.CASCADE)
+    sintomas = models.CharField(max_length=100, choices=SINTOMAS)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta: 
+        verbose_name_plural = ("Sintomas")
+
+class AmbientesConsumo(models.Model):
+    Ambientes = (('festas', 'Festas'), ('rua', 'Rua'), ('amigos', 'Amigos'), ('casa', 'Casa'), ('trabalho', 'Trabalho'), ('com_desconhecidos', 'Com Desconhecidos'), ('sozinho', 'Sozinho'))
+    psicologia = models.ForeignKey(Psicologia, on_delete=models.CASCADE)
+    ambientes_consumo = models.CharField(max_length=100, choices=Ambientes)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta: 
+        verbose_name_plural = ("Ambientes de Consumo")
+
+class SinalizadoresProblematicosDescorrentes(models.Model):
+    SINALIZADORES = (('faltas_frequentes', 'Faltas Frequentes no trabalho'), ('depressao', 'Depressao'), ('historia_de_trauma', 'Historia de Trauma'), ('ansiedade', 'Ansiedade'), ('hipertensao', 'Hipertensao'), ('sintoma_gastro', 'Sintoma GastroIntestinal'), ('disturbio_sono', 'Disturbio do sono'), ('disfuncao_sexual', 'Disfunção Sexual'), ('hemorragias', 'Hemorragias'))
+    psicologia = models.ForeignKey(Psicologia, on_delete=models.CASCADE) 
+    sinalizadores_problematicos_decorrentes_ao_uso = models.CharField(max_length=100, choices=SINALIZADORES)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta: 
+        verbose_name_plural = ("Sinalizadores Problematicos Decorrentes ao uso de alcool e drogas")
+
+class HistoricoDrogaPsicologia(models.Model):
+    DROGA = (('alcool', 'Alcool'), ('crack', 'Crack'), ('maconha', 'Maconha/Haxixe'), ('cocaina', 'Cocaina'), ('inalante', 'Inalante/Cola'), ('diazepan', 'Diazepan'), ('anfetamina', 'Anfetamina/Remedio p/ Emagrecer'), ('ecstasy', 'Ecstasy/MDMA'), ('lsd', 'LSD'), ('heroina', 'Heroina'), ('tabaco', 'Tabaco'), ('outros', 'Outros'))
+    FREQUENCIA = (('diaria', 'Diaria'), ('semanal', 'Semanal'), ('mensal', 'Mensal'), ('fds', 'Fim de Semana'))
+    PERIODO = (('manha', 'Manhã'), ('tarde', 'Tarde'), ('noite', 'Noite'))
+    USO = (('oral', 'Oral'), ('inalada', 'Inalada'), ('fumada', 'Fumada'), ('injetada', 'Injetada'))
+    psicologia = models.ForeignKey(Psicologia, on_delete=models.CASCADE) 
+    droga = models.CharField(max_length=100, choices=DROGA)
+    idade_primeiro_uso = models.BigIntegerField()
+    idade_ultima_vez = models.BigIntegerField()
+    frenquencia = models.CharField(max_length=100, choices=FREQUENCIA)
+    quando_usa = models.CharField(max_length=100, choices=PERIODO)
+    vias_de_uso = models.CharField(max_length=100, choices=USO)
+    quantidade = models.BigIntegerField()
+    observacoes = models.TextField(blank=True)
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    criado = models.DateField(auto_now_add=True)
+    atualizado = models.DateField(auto_now=True)
+    class Meta: 
+        verbose_name_plural = ("Histórico de Drogas")
 
 class Social(models.Model):
     JUSTICA = (('sim', 'Sim'), ('nao', 'Não'), ('ns', 'N.S'))

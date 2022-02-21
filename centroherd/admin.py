@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST, FilaPsicologia, FilaSocial, FilaEnfermagem, HistoricoDroga, PlanoAcao, HistoricoTratamento, Medicina, FilaMedicina
+from .models import Paciente, Psicologia, Social, Contato, Enfermagem, Doenca_Cronica, Medicacao_Continua, Alergia_Medicamento, DST, FilaPsicologia, FilaSocial, FilaEnfermagem, HistoricoDroga, PlanoAcao, HistoricoTratamento, Medicina, FilaMedicina, TratamentosAnteriores, Sintomas, AmbientesConsumo, SinalizadoresProblematicosDescorrentes, HistoricoDrogaPsicologia
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 
 class PsicologiaInline(TabularInlinePaginated):
@@ -57,11 +57,51 @@ class PacienteAdmin(admin.ModelAdmin):
 
 admin.site.register(Paciente, PacienteAdmin)
 
+
+class TratamentosAnterioresInline(TabularInlinePaginated):
+    model = TratamentosAnteriores    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
+class SintomasInline(TabularInlinePaginated):
+    model = Sintomas    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
+class AmbientesConsumoInline(TabularInlinePaginated):
+    model = AmbientesConsumo    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
+class SinalizadoresProblematicosDescorrentesInline(TabularInlinePaginated):
+    model = SinalizadoresProblematicosDescorrentes    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
+class HistoricoDrogaPsicologiaInline(TabularInlinePaginated):
+    model = HistoricoDrogaPsicologia    
+    per_page = 1
+    readonly_fields=('usuario',)
+    ordering = ('-criado',)
+
 class PsicologiaAdmin(admin.ModelAdmin):
-    list_display  = ('nome', 'acompanhamento', 'criado', 'atualizado', 'usuario')
+    list_display  = ('nome', 'condicoes_moradia','demanda_atendimento','se_empresa','motivo_demanda','situacao_atual','usuario_espera_tratamento','tratamento_anterior','frequencia_e_locais','sintoma_ao_chegar','outros_sintomas','droga_intravenosa','overdose_por_essas_drogas','overdose_droga_e_frequencia','situacao_que_faz_o_uso','reacoes_da_droga','saude','sono','alimentacao','alucinacao_com_droga','alucinacao_sem_droga','desmaio_convulcao_com_droga','desmaio_convulcao_sem_droga','toma_alguma_medicacao','quais_medicacoes','critica_situacao','desemprego','dificuldade_ter_manter_vinculos_sociais','dificuldade_de_gerir_propria_vida','problemas_familiares','agressividade','problemas_ambiente_trabalho','problemas_legais_juridicos_existentes_ou_pendentes','quais_problemas_legais_juridicos','ultimo_episodio_de_consumo','tempo_abstitencia','quantidade_consumida','via_administracao_escolhida','frequencia_consumo_ultimos_meses','parecer_tecnico','hipoteses_diagnosticas','metas_atividades_terapeuticas','fatores_de_risco_e_mantenedores_da_dependencia','fatores_de_protecao_e_prognosticos_da_dependencia', 'criado', 'atualizado', 'usuario')
     search_fields = ['paciente__nome']
     autocomplete_fields = ['paciente']
     readonly_fields=('usuario',)
+
+    model = Psicologia
+    inlines = [
+        TratamentosAnterioresInline,
+        SintomasInline,
+        AmbientesConsumoInline,
+        SinalizadoresProblematicosDescorrentesInline,
+        HistoricoDrogaPsicologiaInline,
+    ]
 
     @admin.display
     def nome(self, obj):
@@ -70,6 +110,11 @@ class PsicologiaAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change): 
         obj.usuario = request.user
         obj.save()
+
+    def save_formset(self, request, form, formset, change):
+        for form in formset.forms:
+            form.instance.usuario = request.user
+        formset.save()
 
 admin.site.register(Psicologia, PsicologiaAdmin)
 
