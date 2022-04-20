@@ -199,7 +199,7 @@ class SinalizadoresProblematicosDescorrentes(models.Model):
 class HistoricoDrogaPsicologia(models.Model):
     DROGA = (('alcool', 'Alcool'), ('crack', 'Crack'), ('maconha', 'Maconha/Haxixe'), ('cocaina', 'Cocaina'), ('inalante', 'Inalante/Cola'), ('diazepan', 'Diazepan'), ('anfetamina', 'Anfetamina/Remedio p/ Emagrecer'), ('ecstasy', 'Ecstasy/MDMA'), ('lsd', 'LSD'), ('heroina', 'Heroina'), ('tabaco', 'Tabaco'), ('outros', 'Outros'))
     FREQUENCIA = (('diaria', 'Diaria'), ('semanal', 'Semanal'), ('mensal', 'Mensal'), ('fds', 'Fim de Semana'))
-    PERIODO = (('manha', 'Manhã'), ('tarde', 'Tarde'), ('noite', 'Noite'))
+    PERIODO = (('manha', 'Manhã'), ('tarde', 'Tarde'), ('noite', 'Noite'), ('qualquer', 'Qualquer Horario'))
     USO = (('oral', 'Oral'), ('inalada', 'Inalada'), ('fumada', 'Fumada'), ('injetada', 'Injetada'))
     psicologia = models.ForeignKey(Psicologia, on_delete=models.CASCADE) 
     droga = models.CharField(max_length=100, choices=DROGA)
@@ -208,7 +208,7 @@ class HistoricoDrogaPsicologia(models.Model):
     frenquencia = models.CharField(max_length=100, choices=FREQUENCIA)
     quando_usa = models.CharField(max_length=100, choices=PERIODO)
     vias_de_uso = models.CharField(max_length=100, choices=USO)
-    quantidade = models.BigIntegerField()
+    quantidade = models.CharField(max_length=100)
     observacoes = models.TextField(blank=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     criado = models.DateField(auto_now_add=True)
